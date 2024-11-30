@@ -1,0 +1,7 @@
+# Ignore files and directories
+.env
+.idea/
+.vscode/
+vendor/
+*.log
+*.exe
