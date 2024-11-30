@@ -1,9 +1,31 @@
 version: '3'
 services:
-  stock_inv:
-    container_name:"stock_inv"
-  build:
-    context: .
-    dockerfile : Dockerfile
+  postgres:
+    image: postgres:16
+    container_name: "stock_inv"
+    ports: 
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: "root"
+      POSTGRES_DB: stock_inv
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+    container_name: golang_app
+    depends_on:
+      - postgres
     ports:
-      -"8081:8080"
+      - "8080:8080"
+    environment:
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_NAME: stock_inv
+
+volumes:
+  pg_data:

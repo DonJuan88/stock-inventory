@@ -13,7 +13,7 @@ RUN go mod download
 COPY . .
 
 #build aplikasi
-RUN go build -o main.go
+RUN go build -o stock-inventory .
 
 #ambil port
 EXPOSE 8080
