@@ -2,7 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type BrandStockPrice struct {
+type BranchStockPrice struct {
 	gorm.Model
 	BranchCode  string `json:"branch_code"`
 	ProductCode string `json:"code"`
