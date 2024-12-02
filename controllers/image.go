@@ -47,7 +47,7 @@ func ImagePost(c *gin.Context) {
 	})
 }
 
-func Imagehow(c *gin.Context) {
+func ImageShow(c *gin.Context) {
 	var Image models.ProductImage
 	id := c.Param("id")
 	res := config.DB.Find(&Image, id)

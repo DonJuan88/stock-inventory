@@ -47,7 +47,7 @@ func TransferPost(c *gin.Context) {
 	})
 }
 
-func Transferhow(c *gin.Context) {
+func TransferShow(c *gin.Context) {
 	var Transfer models.Transfer
 	id := c.Param("id")
 	res := config.DB.Find(&Transfer, id)

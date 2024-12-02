@@ -47,7 +47,7 @@ func OrderPost(c *gin.Context) {
 	})
 }
 
-func Orderhow(c *gin.Context) {
+func OrderShow(c *gin.Context) {
 	var Order models.Order
 	id := c.Param("id")
 	res := config.DB.Find(&Order, id)

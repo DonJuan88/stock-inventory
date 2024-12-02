@@ -23,7 +23,7 @@ func CustomerIndex(c *gin.Context) {
 	})
 }
 
-/* func CustomerPost(c *gin.Context) {
+func CustomerPost(c *gin.Context) {
 	var Customer *models.User
 	err := c.ShouldBind(&Customer)
 	if err != nil {
@@ -33,17 +33,7 @@ func CustomerIndex(c *gin.Context) {
 		return
 	}
 
-	exists, err := helper.CheckEmailExists(config.DB, Customer.Email)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
-		return
-	}
-
-	if exists {
-		c.JSON(http.StatusConflict, gin.H{"error": "Customer Code already registered"})
-		return
-	}
-
+	
 	res := config.DB.Create(Customer)
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -55,7 +45,7 @@ func CustomerIndex(c *gin.Context) {
 		"data": Customer,
 	})
 }
- */
+
 func CustomerShow(c *gin.Context) {
 	var Customer models.Customer
 	id := c.Param("id")
@@ -70,7 +60,7 @@ func CustomerShow(c *gin.Context) {
 		"data": Customer,
 	})
 }
-/* 
+
 func CustomerUpdate(c *gin.Context) {
 	var Customer models.Customer
 	id := c.Param("id")
@@ -95,7 +85,7 @@ func CustomerUpdate(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"data": Customer,
 	})
-} */
+} 
 
 func CustomerDelete(c *gin.Context) {
 	var Customer models.Customer

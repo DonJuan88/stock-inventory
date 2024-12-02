@@ -5,15 +5,17 @@ import (
 	"stock-inventory/config"
 	"stock-inventory/helper"
 	"stock-inventory/models"
+	"stock-inventory/utility"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 
 
-func AccountPost(c *gin.Context) {
-	var Account *models.User
-	err := c.ShouldBind(&Account)
+func UserPost(c *gin.Context) {
+	var User *models.User
+	err := c.ShouldBind(&User)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
@@ -21,82 +23,122 @@ func AccountPost(c *gin.Context) {
 		return
 	}
 
-	exists, err := helper.CheckEmailExists(config.DB, Account.Email)
+	exists, err := helper.CheckEmailExists(config.DB, User.Email)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
 		return
 	}
 
 	if exists {
-		c.JSON(http.StatusConflict, gin.H{"error": "Account Code already registered"})
+		c.JSON(http.StatusConflict, gin.H{"error": "User Code already registered"})
 		return
 	}
 
-	res := config.DB.Create(Account)
+	res := config.DB.Create(User)
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Account cannot created",
+			"error": "User cannot created",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": Account,
+		"data": User,
 	})
 }
 
-func AccountShow(c *gin.Context) {
-	var Account models.User
+func UserShow(c *gin.Context) {
+	var User models.User
 	id := c.Param("id")
-	res := config.DB.Find(&Account, id)
+	res := config.DB.Find(&User, id)
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
-			"message": "Account not found",
+			"message": "User not found",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": Account,
+		"data": User,
 	})
 }
 
-func AccountUpdate(c *gin.Context) {
-	var Account models.User
-	id := c.Param("id")
-	err := c.ShouldBind(&Account)
 
+
+func UserDelete(c *gin.Context) {
+	var User models.User
+	id := c.Param("id")
+	res := config.DB.Find(&User, id)
+	if res.RowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": "User not found",
+		})
+		return
+	}
+	config.DB.Delete(&User)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "User deleted",
+	})
+}
+
+
+func UserUpdatePassword(c *gin.Context) {
+	var User models.User
+	id := c.Param("id")
+	// Cari user berdasarkan ID
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&User).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	var UpdateUser models.UpdateUser
+
+	if err := c.ShouldBindJSON(&UpdateUser); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Compare password
+	if err := bcrypt.CompareHashAndPassword([]byte(User.Password), []byte(UpdateUser.LastPassword)); err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid password"})
+		return
+	}
+
+	if UpdateUser.Password != UpdateUser.PasswordConfirmation {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Password not Match",
+		})
+		return
+
+	}
+
+	paswordHash, err := utility.HashPassword(UpdateUser.Password)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err,
+			"error": "Password cannot be Decrypt",
 		})
 		return
 	}
 
-	var UpdateAccount models.User
-	res := config.DB.Model(&UpdateAccount).Where("id = ?", id).Updates(Account)
+	//res := config.DB.Model(&UpdateUser).Where("id = ?", id).Updates(User)
+	config.DB.Model(&User).Where("id = ?", id).Update("Password", paswordHash)
 
-	if res.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Account not updated",
-		})
-		return
-	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": Account,
+		"message": "Password Updated",
 	})
-} 
+}
 
-func AccountDelete(c *gin.Context) {
-	var Account models.User
-	id := c.Param("id")
-	res := config.DB.Find(&Account, id)
-	if res.RowsAffected == 0 {
-		c.JSON(http.StatusNotFound, gin.H{
-			"message": "Account not found",
-		})
+
+func Logout(c *gin.Context) {
+	authHeader, _ := c.Cookie("Author")
+
+	//ojo diganti
+
+	if authHeader == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing"})
+		c.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
-	config.DB.Delete(&Account)
+	c.SetCookie("Author", "", -1, "", "", false, true)
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Account deleted",
+		"message": "User logged out successfully",
 	})
 }

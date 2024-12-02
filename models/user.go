@@ -12,3 +12,10 @@ type User struct {
 	IsAdmin   bool   `json:"admin" gorm:"default:false"`
 	Active    bool   `json:"active"`
 }
+
+type UpdateUser struct {
+	LastPassword         string `json:"last_password"`
+	Password             string `json:"password" `
+	PasswordConfirmation string `json:"password_confirmation" `
+	Active               bool   `json:"active"`
+}

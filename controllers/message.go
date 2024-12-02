@@ -47,7 +47,7 @@ func MessagePost(c *gin.Context) {
 	})
 }
 
-func Messagehow(c *gin.Context) {
+func MessageShow(c *gin.Context) {
 	var Message models.Message
 	id := c.Param("id")
 	res := config.DB.Find(&Message, id)

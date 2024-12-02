@@ -47,7 +47,7 @@ func ProductPost(c *gin.Context) {
 	})
 }
 
-func Producthow(c *gin.Context) {
+func ProductShow(c *gin.Context) {
 	var Product models.Product
 	id := c.Param("id")
 	res := config.DB.Find(&Product, id)

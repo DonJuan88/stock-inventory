@@ -47,7 +47,7 @@ func SupplierPost(c *gin.Context) {
 	})
 }
 
-func Supplierhow(c *gin.Context) {
+func SupplierShow(c *gin.Context) {
 	var Supplier models.Supplier
 	id := c.Param("id")
 	res := config.DB.Find(&Supplier, id)

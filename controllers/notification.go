@@ -47,7 +47,7 @@ func NotificationPost(c *gin.Context) {
 	})
 }
 
-func Notificationhow(c *gin.Context) {
+func NotificationShow(c *gin.Context) {
 	var Notification models.Notification
 	id := c.Param("id")
 	res := config.DB.Find(&Notification, id)

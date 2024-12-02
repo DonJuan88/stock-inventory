@@ -47,7 +47,7 @@ func SalePost(c *gin.Context) {
 	})
 }
 
-func Salehow(c *gin.Context) {
+func SaleShow(c *gin.Context) {
 	var Sale models.Sale
 	id := c.Param("id")
 	res := config.DB.Find(&Sale, id)

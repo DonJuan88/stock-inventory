@@ -47,7 +47,7 @@ func TransferDetailPost(c *gin.Context) {
 	})
 }
 
-func TransferDetailhow(c *gin.Context) {
+func TransferDetailShow(c *gin.Context) {
 	var TransferDetail models.TransferDetail
 	id := c.Param("id")
 	res := config.DB.Find(&TransferDetail, id)
