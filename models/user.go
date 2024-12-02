@@ -9,6 +9,6 @@ type User struct {
 	LastName  string `json:"lastname"`
 	Email     string `json:"email" gorm:"unique"`
 	Password  string `json:"password"`
-	IsAdmin   bool   `json:"admin"`
+	IsAdmin   bool   `json:"admin" gorm:"default:false"`
 	Active    bool   `json:"active"`
 }

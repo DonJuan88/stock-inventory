@@ -6,9 +6,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func CheckItemExists(db *gorm.DB, code string) (bool, error) {
-	var product models.Product
-	result := db.Where("product_code = ?", code).First(&product)
+func CheckSupplierExists(db *gorm.DB,uuid string) (bool, error) {
+	var supplier models.Supplier
+	result := db.Where("uuid = ?", uuid).First(&supplier)
 
 	// If record found, return true
 	if result.RowsAffected > 0 {

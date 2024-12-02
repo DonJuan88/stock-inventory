@@ -7,8 +7,8 @@ import (
 )
 
 func CheckBranchExists(db *gorm.DB, code string) (bool, error) {
-	var Branch models.Branch
-	result := db.Where("Branch_code = ?", code).First(&Branch)
+	var branch models.Branch
+	result := db.Where("Branch_code = ?", code).First(&branch)
 
 	// If record found, return true
 	if result.RowsAffected > 0 {

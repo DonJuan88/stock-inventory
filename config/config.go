@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"log"
+	"stock-inventory/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -30,5 +31,24 @@ func DatabaseConnection() {
 
 func dbMigrate() {
 
-	DB.AutoMigrate()
+	DB.AutoMigrate(
+		models.Branch{},
+		models.BranchStockPrice{},
+		models.Brands{},
+		models.Categories{},
+		models.Company{},
+		models.Customer{},
+		models.ProductImage{},
+		models.Message{},
+		models.Notification{},
+		models.Order{},
+		models.OrderDetail{},
+		models.Product{},
+		models.Sale{},
+		models.SaleDetail{},
+		models.Supplier{},
+		models.Transfer{},
+		models.TransferDetail{},
+		models.User{},
+	)
 }
