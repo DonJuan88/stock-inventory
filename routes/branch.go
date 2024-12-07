@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func  BranchRoutes(rg *gin.RouterGroup) {
+func BranchRoutes(rg *gin.RouterGroup) {
 	rg.GET("/branch/:id", controller.BranchShow)
 	rg.GET("/branch", controller.BranchIndex)
 	rg.POST("/branch", controller.BranchPost)

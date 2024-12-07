@@ -1,31 +1,55 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"fmt"
+	"log"
 
-type Config struct {
-	URL_PORT string
+	"stock-inventory/models"
 
-	DATABASE_HOST     string
-	DATABASE_USER     string
-	DATABASE_PASSWORD string
-	DATABASE_NAME     string
-	DATABASE_PORT     string
-	DATABASE_SSL      string
-	TOKEN_LOGIN       string
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
+
+var DB *gorm.DB
+var err error
+
+func DatabaseConnection() {
+
+	dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=%v", ENV.DATABASE_HOST, ENV.DATABASE_USER, ENV.DATABASE_PASSWORD, ENV.DATABASE_NAME, ENV.DATABASE_PORT, ENV.DATABASE_SSL)
+	//dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=disabled", ENV.DATABASE_HOST, ENV.DATABASE_USER, ENV.DATABASE_PASSWORD, ENV.DATABASE_NAME, ENV.DATABASE_PORT)
+
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+	//call migration
+	dbMigrate()
+
+	//
+	if err != nil {
+		log.Fatal("Connection error...", err)
+	}
+	fmt.Println("Database Success Connnected")
 }
 
-var ENV *Config
+func dbMigrate() {
 
-func LoadConfig() {
-	viper.AddConfigPath(".")
-	viper.SetConfigName(".env")
-	viper.SetConfigType("env")
-
-	if err := viper.ReadInConfig(); err != nil {
-		panic(err)
-	}
-
-	if err := viper.Unmarshal(&ENV); err != nil {
-		panic(err)
-	}
+	DB.AutoMigrate(
+		models.Branch{},
+		models.BranchStockPrice{},
+		models.Brands{},
+		models.Categories{},
+		models.Company{},
+		models.Customer{},
+		models.ProductImage{},
+		models.Message{},
+		models.Notification{},
+		models.Order{},
+		models.OrderDetail{},
+		models.Product{},
+		models.Sale{},
+		models.SaleDetail{},
+		models.Supplier{},
+		models.Transfer{},
+		models.TransferDetail{},
+		models.User{},
+	)
 }

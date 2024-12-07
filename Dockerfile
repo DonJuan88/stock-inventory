@@ -1,22 +1,31 @@
-#ambil golang(aplikasi induk) sebagai base
-FROM golang:1:21
+# Stage 1: Build the application
+FROM golang:1.21 AS builder
 
-#daftarkan direktory
-ADD . /stock-inventory
-WORKDIR /stock-inventory
 
-#copy modules dan addons
+# Set the working directory
+WORKDIR /app
+
+# Copy go.mod and go.sum to cache dependencies
 COPY go.mod go.sum ./
 RUN go mod download
 
-#copy semua kode aplikasi
+# Copy the source code into the container
 COPY . .
 
-#build aplikasi
-RUN go build -o stock-inventory .
+# Build the Go binary
+RUN go build -o main .
 
-#ambil port
-EXPOSE 8080
+# Stage 2: Create the minimal image
+FROM debian:bookworm-slim
 
-#jalankan aplikasi
-CMD [ "/main" ]
+# Copy the built binary from the builder stage
+COPY --from=builder /app/main /main
+
+# Copy the .env file into the container's root directory
+COPY .env ./
+
+# Ensure the binary is executable
+RUN chmod +x /main
+
+# Specify the entrypoint for the container
+CMD ["/main"]

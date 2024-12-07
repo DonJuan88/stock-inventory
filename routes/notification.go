@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func  NotificationRoutes(rg *gin.RouterGroup) {
+func NotificationRoutes(rg *gin.RouterGroup) {
 	rg.GET("/notification", controller.NotificationIndex)
 	rg.POST("/notification", controller.NotificationPost)
 	rg.PUT("/notification/:id", controller.NotificationUpdate)

@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func CheckSupplierExists(db *gorm.DB,uuid string) (bool, error) {
+func CheckSupplierExists(db *gorm.DB, uuid string) (bool, error) {
 	var supplier models.Supplier
 	result := db.Where("uuid = ?", uuid).First(&supplier)
 

@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func  OrderDoutes(rg *gin.RouterGroup) {
+func OrderDoutes(rg *gin.RouterGroup) {
 	rg.GET("/order/:id", controller.OrderShow)
 	rg.GET("/order", controller.OrderIndex)
 	rg.POST("/order", controller.OrderPost)

@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func  SupplierRoutes(rg *gin.RouterGroup) {
+func SupplierRoutes(rg *gin.RouterGroup) {
 	rg.GET("/supplier/:id", controller.SupplierShow)
 	rg.GET("/supplier", controller.SupplierIndex)
 	rg.POST("/supplier", controller.SupplierPost)

@@ -2,7 +2,11 @@ package controller
 
 import (
 	"errors"
+	"fmt"
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"stock-inventory/config"
 	"stock-inventory/models"
 
@@ -25,32 +29,43 @@ func ImageIndex(c *gin.Context) {
 }
 
 func ImagePost(c *gin.Context) {
-	var Image *models.ProductImage
-	err := c.ShouldBind(&Image)
+
+	file, err := c.FormFile("image")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err,
-		})
-		return
-
-	}
-
-	res := config.DB.Create(Image)
-	if res.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Image cannot created",
-		})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No file is uploaded"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Image Created",
-	})
+
+	// Save file to the local file system
+	pathmaster := filepath.Dir("C:/PROJECT/FRONTEND/FLUTTER/newpawpaw/datase/")
+	filename := filepath.Base(file.Filename)
+	filePath := filepath.Join(pathmaster, "images", filename)
+
+	if err := c.SaveUploadedFile(file, filePath); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
+		return
+	}
+	fmt.Println(filePath)
+
+	code := c.PostForm("code")
+
+	item := models.ProductImage{
+		ProductCode: code,
+		FileName:    filePath,
+	}
+	fmt.Println(item)
+	if err := config.DB.Create(&item).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to save data to database"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "File uploaded successfully"})
 }
 
 func ImageShow(c *gin.Context) {
-	var Image models.ProductImage
-	id := c.Param("id")
-	res := config.DB.Find(&Image, id)
+	var images []models.ProductImage
+	code := c.Param("item_code")
+	res := config.DB.Find(&images, code)
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
 			"message": "Image not found",
@@ -58,48 +73,33 @@ func ImageShow(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": Image,
-	})
-}
-
-func ImageUpdate(c *gin.Context) {
-	var Image models.ProductImage
-	id := c.Param("id")
-	err := c.ShouldBind(&Image)
-
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err,
-		})
-		return
-	}
-
-	var UpdateImage models.ProductImage
-	res := config.DB.Model(&UpdateImage).Where("id = ?", id).Updates(Image)
-
-	if res.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Image not updated",
-		})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Image Updated",
+		"data": images,
 	})
 }
 
 func ImageDelete(c *gin.Context) {
-	var Image models.ProductImage
+	var images models.ProductImage
+
 	id := c.Param("id")
-	res := config.DB.Find(&Image, id)
+	res := config.DB.Find(&images, id)
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
 			"message": "Image not found",
 		})
 		return
 	}
-	config.DB.Delete(&Image)
+
+	var result string
+	config.DB.Raw("select file_name from item_images Where id= ? ", id).Scan(&result)
+
+	fmt.Println(result)
+	if err := os.Remove(result); err != nil {
+		log.Fatal(err)
+	}
+
+	config.DB.Delete(&images)
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Image deleted",
 	})
+
 }

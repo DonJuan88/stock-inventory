@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 func BranchStockPost(c *gin.Context) {
 	var Branchs *models.BranchStockPrice
 	err := c.ShouldBind(&Branchs)
@@ -30,7 +29,7 @@ func BranchStockPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Branch Created",
 	})
-} 
+}
 
 func BranchStockShow(c *gin.Context) {
 	var Branchs models.BranchStockPrice
@@ -88,4 +87,3 @@ func BranchStockDelete(c *gin.Context) {
 		"message": "Branch deleted",
 	})
 }
-

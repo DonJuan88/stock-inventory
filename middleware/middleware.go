@@ -16,15 +16,12 @@ func CheckAuth(c *gin.Context) {
 
 	authHeader, _ := c.Cookie("Author")
 	//ojo diganti
-	//	fmt.Println("part 1 jwt")
+
 	if authHeader == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing"})
 		c.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
-
-	//	fmt.Println(authHeader)
-	//	fmt.Println("part 2 jwt")
 
 	// nduwur ojo diganti
 
@@ -35,10 +32,8 @@ func CheckAuth(c *gin.Context) {
 		return []byte(os.Getenv("TOKEN_LOGIN")), nil
 	})
 
-	//	fmt.Println("part 3 jwt")
-
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		// Chec k the expiry date
+		// Check the expiry date
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}

@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func  SaleDRoutes(rg *gin.RouterGroup) {
+func SaleDRoutes(rg *gin.RouterGroup) {
 	rg.GET("/saledetails/:id", controller.SaleDShow)
 	rg.GET("/saledetails", controller.SaleDIndex)
 	rg.POST("/saledetails", controller.SaleDPost)

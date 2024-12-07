@@ -6,9 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func LoginRoutes(rg *gin.RouterGroup) {
 
-func LoginRoutes(rg *gin.RouterGroup){
-	
 	rg.POST("/login", controller.UserLogin)
 
 	rg.GET("/validate", controller.Validate)

@@ -19,3 +19,14 @@ type UpdateUser struct {
 	PasswordConfirmation string `json:"password_confirmation" `
 	Active               bool   `json:"active"`
 }
+
+type Register struct {
+	Uuid                 string `json:"uid"`
+	FirstName            string `json:"firstname"`
+	LastName             string `json:"lastname"`
+	Email                string `json:"email" gorm:"unique"`
+	Password             string `json:"password"`
+	PasswordConfirmation string `json:"passwordconfirmation"`
+	IsAdmin              bool   `json:"admin" gorm:"default:false"`
+	Active               bool   `json:"active" gorm:"default:true"`
+}
