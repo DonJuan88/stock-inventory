@@ -12,6 +12,7 @@ type Config struct {
 	DATABASE_PORT     string
 	DATABASE_SSL      string
 	TOKEN_LOGIN       string
+	TOKEN_EMAIL       string
 }
 
 var ENV *Config

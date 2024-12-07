@@ -43,7 +43,7 @@ func UserPost(c *gin.Context) {
 		return
 	}
 
-	paswordHashEmail, err := helper.HashPassword(register.Email)
+	paswordHashEmail, err := helper.HashEmail(register.Email)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Password cannot be Decrypt",

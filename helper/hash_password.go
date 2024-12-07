@@ -12,3 +12,12 @@ func HashPassword(password string) (string, error) {
 
 	return string(passwordHash), err
 }
+
+
+
+func HashEmail(email string) (string, error) {
+	combinedEmail := email + string(config.ENV.TOKEN_EMAIL)
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(combinedEmail), bcrypt.DefaultCost)
+
+	return string(passwordHash), err
+}
