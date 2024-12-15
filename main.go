@@ -5,23 +5,26 @@ import (
 	"stock-inventory/config"
 	"stock-inventory/routes"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
+
+var DB *gorm.DB
 
 func main() {
 	config.LoadConfig()
 	config.DatabaseConnection()
 	//	gin.SetMode(gin.ReleaseMode)
 	fmt.Println("Starting Application...")
-	config.DatabaseConnection()
-
-	fmt.Println("Application are Ready to Use")
 
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
-	//r.Use(cors.Default())
 
+
+
+    r.Use(cors.Default())
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
@@ -56,5 +59,5 @@ func main() {
 	//execute
 	r.ForwardedByClientIP = true
 	r.Run()
-	//	r.Run(fmt.Sprintf(":%v", config.ENV.URL_PORT))
+
 }

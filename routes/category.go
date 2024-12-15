@@ -7,10 +7,10 @@ import (
 )
 
 func CategoryRoutes(rg *gin.RouterGroup) {
-	rg.GET("/category/:id", controller.CategoryShow)
-	rg.GET("/category", controller.CategoryIndex)
-	rg.POST("/category", controller.CategoryPost)
-	rg.PUT("/category/:id", controller.CategoryUpdate)
-	rg.DELETE("/category/:id", controller.CategoryDelete)
+	rg.GET("/categories/:id", controller.CategoryShow)
+	rg.GET("/categories", controller.CategoryIndex)
+	rg.POST("/categories", controller.CategoryPost)
+	rg.PUT("/categories/:id", controller.CategoryUpdate)
+	rg.DELETE("/categories/:id", controller.CategoryDelete)
 
 }
