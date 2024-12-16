@@ -9,10 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SaleDIndex(c *gin.Context) {
-	var SaleD []models.SaleDetail
+func PurchaseDIndex(c *gin.Context) {
+	var PurchaseD []models.PurchaseDetail
 
-	res := config.DB.Find(&SaleD)
+	res := config.DB.Find(&PurchaseD)
 	if res.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": errors.New("not found"),
@@ -20,13 +20,13 @@ func SaleDIndex(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": SaleD,
+		"data": PurchaseD,
 	})
 }
 
-func SaleDPost(c *gin.Context) {
-	var SaleD *models.SaleDetail
-	err := c.ShouldBind(&SaleD)
+func PurchaseDPost(c *gin.Context) {
+	var PurchaseD *models.PurchaseDetail
+	err := c.ShouldBind(&PurchaseD)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
@@ -35,37 +35,37 @@ func SaleDPost(c *gin.Context) {
 
 	}
 
-	res := config.DB.Create(SaleD)
+	res := config.DB.Create(PurchaseD)
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "SaleD cannot created",
+			"error": "PurchaseD cannot created",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "SaleD Created",
+		"message": "PurchaseD Created",
 	})
 }
 
-func SaleDShow(c *gin.Context) {
-	var SaleD models.SaleDetail
+func PurchaseDShow(c *gin.Context) {
+	var PurchaseD models.PurchaseDetail
 	id := c.Param("id")
-	res := config.DB.Find(&SaleD, id)
+	res := config.DB.Find(&PurchaseD, id)
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
-			"message": "SaleD not found",
+			"message": "PurchaseD not found",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": SaleD,
+		"data": PurchaseD,
 	})
 }
 
-func SaleDUpdate(c *gin.Context) {
-	var SaleD models.SaleDetail
+func PurchaseDUpdate(c *gin.Context) {
+	var PurchaseD models.PurchaseDetail
 	id := c.Param("id")
-	err := c.ShouldBind(&SaleD)
+	err := c.ShouldBind(&PurchaseD)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -74,32 +74,32 @@ func SaleDUpdate(c *gin.Context) {
 		return
 	}
 
-	var UpdateSaleD models.SaleDetail
-	res := config.DB.Model(&UpdateSaleD).Where("id = ?", id).Updates(SaleD)
+	var UpdatePurchaseD models.PurchaseDetail
+	res := config.DB.Model(&UpdatePurchaseD).Where("id = ?", id).Updates(PurchaseD)
 
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "SaleD not updated",
+			"error": "PurchaseD not updated",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "SaleD Updated",
+		"message": "PurchaseD Updated",
 	})
 }
 
-func SaleDDelete(c *gin.Context) {
-	var SaleD models.SaleDetail
+func PurchaseDDelete(c *gin.Context) {
+	var PurchaseD models.PurchaseDetail
 	id := c.Param("id")
-	res := config.DB.Find(&SaleD, id)
+	res := config.DB.Find(&PurchaseD, id)
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
-			"message": "SaleD not found",
+			"message": "PurchaseD not found",
 		})
 		return
 	}
-	config.DB.Delete(&SaleD)
+	config.DB.Delete(&PurchaseD)
 	c.JSON(http.StatusOK, gin.H{
-		"message": "SaleD deleted",
+		"message": "PurchaseD deleted",
 	})
 }
