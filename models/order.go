@@ -18,4 +18,5 @@ type Order struct {
 	PaymentType  string    `json:"paymenttype"`
 	Reference    string    `json:"reference"`
 	Notes        string    `json:"notes"`
+	Lunas        bool      `jaon:"status gorm:default:false"`
 }

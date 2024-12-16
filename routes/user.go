@@ -12,5 +12,5 @@ func AccountUserRoutes(rg *gin.RouterGroup) {
 	rg.PUT("/accounts/:id", controller.UserUpdatePassword)
 	rg.POST("/accounts", controller.UserPost)
 	rg.PATCH("/accounts", controller.UserUpdatePassword)
-	
+
 }

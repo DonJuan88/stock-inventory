@@ -19,12 +19,9 @@ func main() {
 	fmt.Println("Starting Application...")
 
 	gin.SetMode(gin.ReleaseMode)
-
 	r := gin.Default()
-
-
-
-    r.Use(cors.Default())
+	r.Use(cors.Default())
+	r.SetTrustedProxies(nil)
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
