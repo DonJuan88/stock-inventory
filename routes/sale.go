@@ -6,11 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func PurchaseRoutes(rg *gin.RouterGroup) {
-	rg.GET("/purchase/:id", controller.PurchaseShow)
-	rg.GET("/purchase", controller.PurchaseIndex)
-	rg.POST("/purchase", controller.PurchasePost)
-	rg.PUT("/purchase/:id", controller.PurchaseUpdate)
-	rg.DELETE("/purchase/:id", controller.PurchaseDelete)
+func SaleRoutes(rg *gin.RouterGroup) {
+	rg.GET("/sale/:id", controller.SaleShow)
+	rg.GET("/sale", controller.SaleIndex)
+	rg.POST("/sale", controller.SalePost)
+	rg.PUT("/sale/:id", controller.SaleUpdate)
+	rg.DELETE("/sale/:id", controller.SaleDelete)
 
 }

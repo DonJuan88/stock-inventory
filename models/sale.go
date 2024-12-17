@@ -6,10 +6,10 @@ import (
 	"gorm.io/gorm"
 )
 
-type Order struct {
+type Sale struct {
 	gorm.Model
-	OrderNo       string    `json:"order_no"`
-	OrderDate     time.Time `json:"order_date"`
+	SaleNo       string    `json:"sale_no"`
+	SaleDate     time.Time `json:"sale_date"`
 	Customer      string    `json:"customer"`
 	ShippingCost  int64     `json:"shippingprice"`
 	Tax1          int64     `json:"tax1"`

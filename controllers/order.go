@@ -9,10 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func OrderIndex(c *gin.Context) {
-	var Order []models.Order
+func SaleIndex(c *gin.Context) {
+	var Sale []models.Sale
 
-	res := config.DB.Find(&Order)
+	res := config.DB.Find(&Sale)
 	if res.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": errors.New("not found"),
@@ -20,13 +20,13 @@ func OrderIndex(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": Order,
+		"data": Sale,
 	})
 }
 
-func OrderPost(c *gin.Context) {
-	var Order *models.Order
-	err := c.ShouldBind(&Order)
+func SalePost(c *gin.Context) {
+	var Sale *models.Sale
+	err := c.ShouldBind(&Sale)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
@@ -35,37 +35,37 @@ func OrderPost(c *gin.Context) {
 
 	}
 
-	res := config.DB.Create(Order)
+	res := config.DB.Create(Sale)
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Order cannot created",
+			"error": "Sale cannot created",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Order Created",
+		"message": "Sale Created",
 	})
 }
 
-func OrderShow(c *gin.Context) {
-	var Order models.Order
+func SaleShow(c *gin.Context) {
+	var Sale models.Sale
 	id := c.Param("id")
-	res := config.DB.Find(&Order, id)
+	res := config.DB.Find(&Sale, id)
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
-			"message": "Order not found",
+			"message": "Sale not found",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": Order,
+		"data": Sale,
 	})
 }
 
-func OrderUpdate(c *gin.Context) {
-	var Order models.Order
+func SaleUpdate(c *gin.Context) {
+	var Sale models.Sale
 	id := c.Param("id")
-	err := c.ShouldBind(&Order)
+	err := c.ShouldBind(&Sale)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -74,32 +74,32 @@ func OrderUpdate(c *gin.Context) {
 		return
 	}
 
-	var UpdateOrder models.Order
-	res := config.DB.Model(&UpdateOrder).Where("id = ?", id).Updates(Order)
+	var UpdateSale models.Sale
+	res := config.DB.Model(&UpdateSale).Where("id = ?", id).Updates(Sale)
 
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Order not updated",
+			"error": "Sale not updated",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Order Updated",
+		"message": "Sale Updated",
 	})
 }
 
-func OrderDelete(c *gin.Context) {
-	var Order models.Order
+func SaleDelete(c *gin.Context) {
+	var Sale models.Sale
 	id := c.Param("id")
-	res := config.DB.Find(&Order, id)
+	res := config.DB.Find(&Sale, id)
 	if res.RowsAffected == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
-			"message": "Order not found",
+			"message": "Sale not found",
 		})
 		return
 	}
-	config.DB.Delete(&Order)
+	config.DB.Delete(&Sale)
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Order deleted",
+		"message": "Sale deleted",
 	})
 }

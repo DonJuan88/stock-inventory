@@ -10,4 +10,5 @@ type Branch struct {
 	ContactPerson      string `json:"contact_person"`
 	ContactPersonPhone string `json:"cp_phone"`
 	Phone              string `json:"phone"`
+	Active	bool	`json:"active"  gorm:"default:true"`
 }

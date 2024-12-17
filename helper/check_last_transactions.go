@@ -6,15 +6,15 @@ import (
 	"gorm.io/gorm"
 )
 
-func CheckLastOrder(db *gorm.DB, Order, OrderNo string) (*models.Order, error) {
-	var lastOrder models.Order
-	result := db.Table(Order).Select(OrderNo).Order("created_at DESC").Limit(1).Scan(&lastOrder)
+func CheckLastSale(db *gorm.DB, Sale, SaleNo string) (*models.Sale, error) {
+	var lastSale models.Sale
+	result := db.Table(Sale).Select(SaleNo).Order("created_at DESC").Limit(1).Scan(&lastSale)
 
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
-	return &lastOrder, nil
+	return &lastSale, nil
 }
 
 func CheckLastPurchase(db *gorm.DB, Purchase, purchase_no string) (*models.Purchase, error) {
@@ -42,7 +42,7 @@ func CheckLastTransfer(db *gorm.DB, Transfer, transfer_no string) (*models.Trans
 /*
 func CheckLastTransfer(db *gorm.DB) (*models.Transfer, error) {
 	var lastTransfer models.Transfer
-	result := db.Order("created_at DESC").First(&lastTransfer)
+	result := db.Sale("created_at DESC").First(&lastTransfer)
 
 	if result.Error !=nil{
 		return nil, result.Error
